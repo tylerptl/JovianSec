@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import Hero from '../components/Hero.astro';
+import ServiceStrip from '../components/ServiceStrip.astro';
+import ServiceLines from '../components/ServiceLines.astro';
+import Method from '../components/Method.astro';
+import StatBand from '../components/StatBand.astro';
+import Research from '../components/Research.astro';
+import Credentials from '../components/Credentials.astro';
+import ClosingCta from '../components/ClosingCta.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<Layout>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="page">
+    <SiteNav />
+    <main id="main">
+      <Hero />
+      <ServiceStrip />
+      <ServiceLines />
+      <Method />
+      <StatBand />
+      <Research />
+      <Credentials />
+      <ClosingCta />
+    </main>
+    <SiteFooter />
+  </div>
+</Layout>
+
+<style>
+  /* The design canvas. Fixed at 1280px, centred, with content flush-left
+     against the gutter and the whitespace carried on the right. */
+  .page {
+    width: var(--page-width);
+    min-width: var(--page-width);
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  /* Below the design width the canvas becomes fluid; the per-section
+     breakpoints take over from there. See README.md — not designer-approved. */
+  @media (max-width: 1279px) {
+    .page {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 10;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: var(--jv-accent);
+    background: var(--jv-surface);
+    border: 1px solid var(--jv-accent);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+  }
+
+  .skip:focus {
+    left: var(--gutter);
+    top: 12px;
+  }
+</style>

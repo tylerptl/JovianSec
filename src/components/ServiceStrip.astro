@@ -1,0 +1,112 @@
+---
+import { serviceLines } from '../data/site';
+---
+
+<section id="services" class="strip" aria-label="Service lines">
+  {
+    serviceLines.map((line) => (
+      <div class="cell">
+        <div class="head">
+          <span class={`dot dot-${line.dot}`} aria-hidden="true" />
+          <span class="moon">{line.moon}</span>
+        </div>
+        <p class="desc">{line.short}</p>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--jv-divider);
+  }
+
+  .cell {
+    padding: 24px 32px 28px;
+    border-right: 1px solid var(--jv-divider);
+  }
+
+  /* The first cell picks up the page gutter; the last drops its rule so the
+     band ends in whitespace rather than a line. */
+  .cell:first-child {
+    padding-left: var(--gutter);
+  }
+
+  .cell:last-child {
+    border-right: 0;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 8px;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+  .dot-accent {
+    background: var(--jv-accent);
+  }
+  .dot-rust {
+    background: var(--jv-rust);
+  }
+  .dot-rust-dim {
+    background: var(--jv-rust-dim);
+  }
+  .dot-accent-dim {
+    background: var(--jv-accent-dim);
+  }
+
+  .moon {
+    font-family: var(--font-heading);
+    font-size: 17px;
+  }
+
+  .desc {
+    font-size: 13px;
+    opacity: 0.65;
+    line-height: 1.45;
+  }
+
+  /* Un-designed fallback — see global.css. */
+  @media (max-width: 1023px) {
+    .strip {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cell:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .cell:nth-child(2n + 1) {
+      padding-left: var(--gutter);
+    }
+
+    .cell:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--jv-divider);
+    }
+  }
+
+  @media (max-width: 639px) {
+    .strip {
+      grid-template-columns: 1fr;
+    }
+
+    .cell {
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+      border-right: 0;
+      border-bottom: 1px solid var(--jv-divider);
+    }
+
+    .cell:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>

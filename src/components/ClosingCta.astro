@@ -1,0 +1,256 @@
+---
+import OrbitGlyph from './OrbitGlyph.astro';
+---
+
+<section id="contact" class="cta">
+  <div class="glyph"><OrbitGlyph size={420} /></div>
+
+  <div class="inner">
+    <div>
+      <h2>Tell us what you are shipping. We will tell you how it breaks.</h2>
+      <p class="sub">
+        Scope calls are 30 minutes with the operator who would run the test, not a salesperson.
+      </p>
+    </div>
+
+    <div
+      class="capture"
+      data-capture
+      data-confirm-message="Booked — check your inbox for the calendar link."
+    >
+      <form class="row" data-lead-form novalidate>
+        <label class="sr-only" for="cta-email">Work email</label>
+        <input
+          class="input"
+          id="cta-email"
+          name="email"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          placeholder="you@company.com"
+          required
+        />
+        <button class="btn btn-primary submit" type="submit">Book the call</button>
+      </form>
+
+      {/* Both stay in the DOM so screen readers announce them when filled. */}
+      <p class="confirm" role="status" aria-live="polite" data-confirm></p>
+      <p class="status" role="status" aria-live="polite" data-status></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    padding: 84px var(--gutter) 88px;
+    overflow: hidden;
+  }
+
+  /* Bled off the lower left at half strength. */
+  .glyph {
+    position: absolute;
+    left: -150px;
+    bottom: -210px;
+    opacity: 0.5;
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .inner {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 48px;
+  }
+
+  h2 {
+    font-size: 40px;
+    letter-spacing: -0.025em;
+    margin: 0 0 12px;
+    max-width: 520px;
+    text-wrap: balance;
+  }
+
+  .sub {
+    font-size: 15px;
+    opacity: 0.65;
+    max-width: 440px;
+  }
+
+  .capture {
+    position: relative;
+    flex: none;
+  }
+
+  .row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  /* An author `display` beats the UA's [hidden] rule, so restate it. */
+  .row[hidden] {
+    display: none;
+  }
+
+  .input {
+    width: 240px;
+    height: 42px;
+    padding: 0 12px;
+    font: inherit;
+    font-size: 14px;
+    color: var(--jv-ink);
+    background: var(--jv-surface);
+    border: 1px solid var(--jv-border);
+    border-radius: var(--radius-md);
+    caret-color: var(--jv-accent);
+  }
+
+  .input::placeholder {
+    color: var(--jv-ink);
+    opacity: 0.45;
+  }
+
+  .input[aria-invalid='true'] {
+    border-color: var(--jv-accent);
+  }
+
+  .submit {
+    height: 42px;
+    padding: 0 18px;
+    font-size: 14px;
+  }
+
+  /* Same height as the row it replaces, so the block never jumps. */
+  .confirm {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    font-size: 14px;
+    color: var(--jv-accent);
+  }
+
+  .confirm:empty {
+    display: none;
+  }
+
+  /* Errors hang below the row rather than pushing it up. */
+  .status {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    margin: 0;
+    font-size: 13px;
+    color: var(--jv-accent);
+  }
+
+  .status:empty {
+    display: none;
+  }
+
+  /* Un-designed fallback — see global.css. */
+  @media (max-width: 1023px) {
+    .cta {
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+
+    .inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    h2 {
+      font-size: 32px;
+    }
+
+    /* Errors can push the footer down here rather than overlapping it. */
+    .status {
+      position: static;
+      margin-top: 8px;
+    }
+  }
+
+  @media (max-width: 639px) {
+    h2 {
+      font-size: 26px;
+    }
+
+    .capture,
+    .row {
+      width: 100%;
+    }
+
+    .input {
+      width: auto;
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>
+
+<script>
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const endpoint = import.meta.env.PUBLIC_JV_LEAD_ENDPOINT;
+
+  document.querySelectorAll<HTMLElement>('[data-capture]').forEach((capture) => {
+    const form = capture.querySelector<HTMLFormElement>('[data-lead-form]');
+    const input = capture.querySelector<HTMLInputElement>('input[name="email"]');
+    const submit = capture.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const status = capture.querySelector<HTMLElement>('[data-status]');
+    const confirm = capture.querySelector<HTMLElement>('[data-confirm]');
+    if (!form || !input || !submit || !status || !confirm) return;
+
+    const setError = (message: string) => {
+      status.textContent = message;
+      input.setAttribute('aria-invalid', 'true');
+    };
+
+    const clearError = () => {
+      status.textContent = '';
+      input.removeAttribute('aria-invalid');
+    };
+
+    input.addEventListener('input', clearError);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const email = input.value.trim();
+
+      if (!EMAIL.test(email)) {
+        setError('Enter a valid email address.');
+        input.focus();
+        return;
+      }
+
+      clearError();
+      submit.disabled = true;
+      submit.textContent = 'Booking…';
+
+      try {
+        if (endpoint) {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, source: 'homepage-cta' }),
+          });
+          if (!response.ok) throw new Error(`Lead endpoint returned ${response.status}`);
+        } else {
+          // No CRM wired up yet — see PUBLIC_JV_LEAD_ENDPOINT in README.md.
+          console.warn('PUBLIC_JV_LEAD_ENDPOINT is not set; the submission was not sent anywhere.');
+        }
+
+        form.hidden = true;
+        confirm.textContent = capture.dataset.confirmMessage ?? 'Booked — we will be in touch.';
+      } catch (error) {
+        console.error(error);
+        setError('That did not go through. Email hello@joviansec.com and we will book it manually.');
+        submit.disabled = false;
+        submit.textContent = 'Book the call';
+      }
+    });
+  });
+</script>

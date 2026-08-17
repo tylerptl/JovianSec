@@ -1,0 +1,103 @@
+---
+/**
+ * Dark ⇄ light switch. A real button carrying `aria-pressed` (pressed = light),
+ * driving `data-theme` on <html>. The chosen theme persists in localStorage;
+ * with nothing stored the page follows `prefers-color-scheme` — see the
+ * inline boot script in Layout.astro, which runs before first paint.
+ */
+---
+
+<button type="button" class="toggle" id="theme-toggle" aria-pressed="false" title="Switch theme">
+  <span class="track" aria-hidden="true"><span class="knob"></span></span>
+  <span class="label">Theme</span>
+</button>
+
+<style>
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .track {
+    display: block;
+    position: relative;
+    width: 42px;
+    height: 22px;
+    border-radius: 11px;
+    border: 1px solid var(--jv-border);
+    background: var(--jv-surface);
+  }
+
+  .knob {
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--jv-accent);
+    transition:
+      transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      background-color 0.45s ease;
+  }
+
+  :global([data-theme='light']) .knob {
+    transform: translateX(20px);
+  }
+
+  .label {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .knob {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>
+
+<script>
+  const STORAGE_KEY = 'jv-theme';
+  const root = document.documentElement;
+  const button = document.getElementById('theme-toggle');
+
+  const sync = (theme: string) => {
+    root.dataset.theme = theme;
+    button?.setAttribute('aria-pressed', String(theme === 'light'));
+  };
+
+  sync(root.dataset.theme === 'light' ? 'light' : 'dark');
+
+  button?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'light' ? 'dark' : 'light';
+    sync(next);
+    try {
+      localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      /* private mode — the choice just won't outlive the session */
+    }
+  });
+
+  // Follow the OS until the visitor makes an explicit choice.
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (event) => {
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+    if (!stored) sync(event.matches ? 'light' : 'dark');
+  });
+</script>

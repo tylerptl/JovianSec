@@ -1,0 +1,85 @@
+---
+import { stats } from '../data/site';
+---
+
+<section class="band" aria-label="By the numbers">
+  {
+    stats.map((stat) => (
+      <div class="cell">
+        <p class="value">{stat.value}</p>
+        <p class="label">{stat.label}</p>
+      </div>
+    ))
+  }
+</section>
+
+<style>
+  .band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--jv-divider);
+    border-bottom: 1px solid var(--jv-divider);
+  }
+
+  .cell {
+    padding: 28px 32px 32px;
+    border-right: 1px solid var(--jv-divider);
+  }
+
+  .cell:first-child {
+    padding-left: var(--gutter);
+  }
+
+  .cell:last-child {
+    border-right: 0;
+  }
+
+  .value {
+    font-family: var(--font-heading);
+    font-weight: var(--font-heading-weight);
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+
+  .label {
+    font-size: 12px;
+    opacity: 0.55;
+    margin-top: 4px;
+  }
+
+  /* Un-designed fallback — see global.css. */
+  @media (max-width: 1023px) {
+    .band {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cell:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .cell:nth-child(2n + 1) {
+      padding-left: var(--gutter);
+    }
+
+    .cell:nth-child(-n + 2) {
+      border-bottom: 1px solid var(--jv-divider);
+    }
+  }
+
+  @media (max-width: 639px) {
+    .band {
+      grid-template-columns: 1fr;
+    }
+
+    .cell {
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+      border-right: 0;
+      border-bottom: 1px solid var(--jv-divider);
+    }
+
+    .cell:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>

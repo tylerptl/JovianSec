@@ -1,0 +1,101 @@
+---
+import { methodSteps } from '../data/site';
+---
+
+<section id="method" class="method">
+  <h2>How an engagement runs</h2>
+  <p class="intro">
+    One operator owns your engagement end to end. You get their name, their calendar and their
+    working notes, not a portal.
+  </p>
+
+  <ol class="steps">
+    {
+      methodSteps.map((item) => (
+        <li class="step">
+          <p class="num">{item.step}</p>
+          <h3>{item.title}</h3>
+          <p class="body">{item.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .method {
+    padding: 0 var(--gutter) 84px;
+  }
+
+  h2 {
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+
+  .intro {
+    font-size: 14px;
+    opacity: 0.62;
+    margin: 0 0 40px;
+    max-width: 520px;
+  }
+
+  /* The 1px gap over a divider-coloured ground is what draws the hairlines
+     between cells; each cell repaints the page ground on top. */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--jv-divider);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .step {
+    background: var(--jv-bg);
+    padding: 26px 24px 30px;
+  }
+
+  .num {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--jv-accent);
+    margin-bottom: 14px;
+  }
+
+  .step h3 {
+    font-size: 17px;
+    line-height: 1.55;
+    letter-spacing: normal;
+    margin-bottom: 7px;
+  }
+
+  .body {
+    font-size: 13px;
+    opacity: 0.62;
+    line-height: 1.5;
+  }
+
+  /* Un-designed fallback — see global.css. The 1px-gap hairline grid works at
+     any column count, so only the track list changes. */
+  @media (max-width: 1023px) {
+    .method {
+      padding-bottom: 64px;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+
+    .steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 639px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,158 @@
+@import './tokens.css';
+@import './components.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--jv-bg);
+}
+
+body {
+  margin: 0;
+  background: var(--jv-bg);
+  color: var(--jv-ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Nocturne's heading base. Headings never go past weight 500 — hierarchy here
+   is size and space. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/*
+ * The theme cross-fade. Applied to the root and every descendant so the hairline
+ * rules, the button outlines and the SVG planet's fills, strokes and gradient
+ * stops all change together rather than snapping one layer at a time.
+ * `.jv-ready` is added after the first frame so the initial paint doesn't animate.
+ */
+.jv-ready,
+.jv-ready *,
+.jv-ready *::before,
+.jv-ready *::after {
+  transition:
+    background-color 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease,
+    fill 0.45s ease,
+    stroke 0.45s ease,
+    stop-color 0.45s ease;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--jv-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--jv-press);
+}
+
+/* SVG presentation attributes can't take var(), so the planet and the logo mark
+   paint through these classes instead of fill="" / stroke="" attributes. */
+.f-ink {
+  fill: var(--jv-ink);
+}
+.f-bg {
+  fill: var(--jv-bg);
+}
+.f-accent {
+  fill: var(--jv-accent);
+}
+.f-storm {
+  fill: var(--jv-storm);
+}
+.f-rust {
+  fill: var(--jv-rust);
+}
+.s-ink {
+  stroke: var(--jv-ink);
+}
+.s-accent {
+  stroke: var(--jv-accent);
+}
+.s-rust {
+  stroke: var(--jv-rust);
+}
+.s-rust-dp {
+  stroke: var(--jv-rust-dp);
+}
+.s-zone {
+  stroke: var(--jv-zone);
+}
+.stop-accent {
+  stop-color: var(--jv-accent);
+}
+.stop-rust {
+  stop-color: var(--jv-rust);
+}
+.stop-bg {
+  stop-color: var(--jv-bg);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * ── Below the design canvas ──────────────────────────────────────────────
+ * Responsive behaviour was NOT designed; the mock is a fixed 1280px canvas.
+ * Everything under `max-width: 1279px` here and in the components is a
+ * functional fallback along the lines the handoff suggested (4-up grids to
+ * 2-up then 1-up, the fixed column splits to stacked, the hero graphic scaled
+ * back and dimmed) and still needs the designer's sign-off. Nothing in this
+ * block affects the 1280px rendering.
+ */
+@media (max-width: 1023px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --gutter: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jv-ready,
+  .jv-ready *,
+  .jv-ready *::before,
+  .jv-ready *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

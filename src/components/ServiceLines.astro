@@ -1,0 +1,148 @@
+---
+import { serviceLines } from '../data/site';
+---
+
+<section class="lines">
+  <div class="layout">
+    <div class="intro">
+      <h2>The four service lines</h2>
+      <p>
+        Each line is staffed by the operators who do that work all year. Scoped by system, priced by
+        the week.
+      </p>
+    </div>
+
+    <div class="rows">
+      {
+        serviceLines.map((line) => (
+          <article class="row">
+            <div class="moon">
+              <span class={`dot dot-${line.dot}`} aria-hidden="true" />
+              <h3>{line.moon}</h3>
+            </div>
+            <div>
+              <p class="title">{line.title}</p>
+              <p class="desc">{line.description}</p>
+            </div>
+            <p class="duration">{line.duration}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .lines {
+    padding: 88px var(--gutter) 76px;
+    border-top: 1px solid var(--jv-divider);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  h2 {
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+  }
+
+  .intro p {
+    font-size: 14px;
+    opacity: 0.62;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 170px 1fr 120px;
+    gap: 24px;
+    align-items: baseline;
+    padding: 22px 0;
+    border-top: 1px solid var(--jv-divider);
+  }
+
+  /* Only the last row closes the stack. */
+  .row:last-child {
+    border-bottom: 1px solid var(--jv-divider);
+  }
+
+  .moon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Set flush with the body leading — the moon name sits on a row baseline,
+     not in a heading block. */
+  .moon h3 {
+    font-size: 19px;
+    line-height: 1.55;
+    letter-spacing: normal;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .dot-accent {
+    background: var(--jv-accent);
+  }
+  .dot-rust {
+    background: var(--jv-rust);
+  }
+  .dot-rust-dim {
+    background: var(--jv-rust-dim);
+  }
+  .dot-accent-dim {
+    background: var(--jv-accent-dim);
+  }
+
+  .title {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+
+  .desc {
+    font-size: 13px;
+    opacity: 0.6;
+  }
+
+  .duration {
+    font-size: 12px;
+    opacity: 0.5;
+    text-align: right;
+  }
+
+  /* Un-designed fallback — see global.css. */
+  @media (max-width: 1023px) {
+    .lines {
+      padding-top: 64px;
+      padding-bottom: 56px;
+    }
+
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    h2 {
+      font-size: 28px;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .duration {
+      text-align: left;
+    }
+  }
+</style>

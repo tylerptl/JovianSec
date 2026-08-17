@@ -1,0 +1,108 @@
+---
+/**
+ * The hero planet. Painted strictly back-to-front, because the composition
+ * depends on the paint order:
+ *
+ *   1. faint outer ring + Callisto
+ *   2. outer orbit, 3. inner orbit + Io
+ *   4. atmospheric haze
+ *   5. the OPAQUE disc — this is what occludes the far half of every orbit
+ *   6. dust gradient, belts and the Great Red Spot, clipped to the disc
+ *   7. disc edge
+ *   8. the FRONT half of the outer orbit, drawn over the disc, + Ganymede/Europa
+ *
+ * Two rules must survive any edit: every orbit passes both in front of and
+ * behind the planet, and every body sits exactly on an orbit path at true
+ * scale (Ganymede 2.9, Callisto 2.7, Io 2.0, Europa 1.7 against r=78).
+ */
+interface Props {
+  size?: number;
+  class?: string;
+}
+
+const { size = 760, class: className } = Astro.props;
+
+const uid = Math.random().toString(36).slice(2, 9);
+const clipId = `planet-clip-${uid}`;
+const hazeId = `planet-haze-${uid}`;
+const dustId = `planet-dust-${uid}`;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 400 400"
+  fill="none"
+  class={className}
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <clipPath id={clipId}><circle cx="200" cy="200" r="78"></circle></clipPath>
+    <radialGradient id={hazeId} cx="50%" cy="50%" r="50%">
+      <stop offset="55%" class="stop-rust" stop-opacity=".38"></stop>
+      <stop offset="100%" class="stop-rust" stop-opacity="0"></stop>
+    </radialGradient>
+    <linearGradient id={dustId} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" class="stop-accent" stop-opacity=".22"></stop>
+      <stop offset="60%" class="stop-rust" stop-opacity=".10"></stop>
+      <stop offset="100%" class="stop-bg" stop-opacity=".55"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- 1 — faint outer ring, Callisto riding it -->
+  <ellipse cx="200" cy="200" rx="196" ry="192" class="s-ink" stroke-width=".6" opacity=".1"
+  ></ellipse>
+  <circle cx="133" cy="19.6" r="2.7" class="f-ink" opacity=".45"></circle>
+
+  <!-- 2 — outer orbit (back half; the front half is drawn at step 8) -->
+  <ellipse
+    cx="200"
+    cy="200"
+    rx="188"
+    ry="68"
+    class="s-ink"
+    stroke-width=".8"
+    opacity=".3"
+    transform="rotate(-18 200 200)"></ellipse>
+
+  <!-- 3 — inner orbit, Io riding it -->
+  <ellipse
+    cx="200"
+    cy="200"
+    rx="150"
+    ry="42"
+    class="s-ink"
+    stroke-width=".8"
+    opacity=".2"
+    transform="rotate(-18 200 200)"></ellipse>
+  <circle cx="61.5" cy="229.9" r="2" class="f-ink" opacity=".7"></circle>
+
+  <!-- 4 — atmospheric haze -->
+  <circle cx="200" cy="200" r="132" fill={`url(#${hazeId})`}></circle>
+
+  <!-- 5 — the opaque disc -->
+  <circle cx="200" cy="200" r="78" class="f-bg"></circle>
+
+  <!-- 6 — banding, clipped to the disc -->
+  <g clip-path={`url(#${clipId})`}>
+    <circle cx="200" cy="200" r="78" fill={`url(#${dustId})`}></circle>
+    <path d="M120 184h160" class="s-rust" stroke-width="13" opacity=".45"></path>
+    <path d="M120 217h160" class="s-rust-dp" stroke-width="15" opacity=".45"></path>
+    <path d="M120 200h160" class="s-zone" stroke-width="7" opacity=".16"></path>
+    <!-- Great Red Spot, sized to sit inside the southern belt -->
+    <circle cx="234" cy="217" r="7" class="f-storm" opacity=".8"></circle>
+  </g>
+
+  <!-- 7 — disc edge -->
+  <circle cx="200" cy="200" r="78" class="s-accent" stroke-width=".9" opacity=".45"></circle>
+
+  <!-- 8 — front half of the outer orbit, over the disc -->
+  <path
+    d="M378.8 141.9A188 68 -18 1 1 21.2 258.1"
+    class="s-ink"
+    stroke-width="1.1"
+    opacity=".75"></path>
+  <circle cx="378.8" cy="141.9" r="2.9" class="f-accent"></circle>
+  <circle cx="221" cy="264.7" r="1.7" class="f-ink" opacity=".5"></circle>
+</svg>

@@ -1,0 +1,70 @@
+/*
+ * Shared interface pieces. Ported from Nocturne's component layer onto the
+ * Jupiter tokens: actions are a 1px outline on transparent, never a fill.
+ * Per-instance sizing lives in the component that uses them.
+ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  /* Inherits the body's 1.55 rather than Nocturne's tighter .btn leading —
+     the outlined buttons are sized off the text box in this design. */
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+}
+
+.btn-primary {
+  color: var(--jv-accent);
+  border-color: var(--jv-accent);
+}
+.btn-primary:hover {
+  background: var(--jv-hover);
+}
+.btn-primary:active {
+  background: var(--jv-press);
+}
+
+.btn-secondary {
+  color: var(--jv-ink);
+  border-color: var(--jv-border);
+}
+.btn-secondary:hover {
+  background: var(--jv-ink-hover);
+}
+.btn-secondary:active {
+  background: var(--jv-ink-press);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* The section eyebrow: 11px, wide tracking, uppercase, always in the accent. */
+.kicker {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--jv-accent);
+}
+
+/* Every section is flush-left against the 56px page gutter. */
+.gutter {
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.rule-top {
+  border-top: 1px solid var(--jv-divider);
+}
+.rule-bottom {
+  border-bottom: 1px solid var(--jv-divider);
+}

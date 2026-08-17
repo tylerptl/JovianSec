@@ -1,0 +1,78 @@
+/*
+ * Jovian Security — design tokens.
+ *
+ * Type, spacing and radius are ported from the Nocturne design system
+ * (design/_ds/.../styles.css). The palette is NOT Nocturne's blue-grey default:
+ * the site ships the approved "Jupiter bands" colorway, declared here as the
+ * dark theme with a single override block for light.
+ *
+ * Every colour used anywhere on the page — including inside the SVG planet —
+ * resolves through one of these custom properties, which is what lets the
+ * theme switch animate as one piece.
+ */
+
+:root {
+  /* — Nocturne: type — */
+  --font-heading: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-heading-weight: 500;
+  --font-body: 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+
+  /* — Nocturne: spacing (density 0.7x) — */
+  --space-1: 2.8px;
+  --space-2: 5.6px;
+  --space-3: 8.4px;
+  --space-4: 11.2px;
+  --space-6: 16.8px;
+  --space-8: 22.4px;
+
+  /* — Nocturne: radius — */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  /* — Layout — */
+  --page-width: 1280px;
+  --gutter: 56px;
+
+  /* — Jupiter bands: dark (default) — */
+  --jv-bg: #0f0c09;
+  --jv-surface: #1b1512;
+  --jv-ink: #f0e7dc;
+  --jv-accent: #d98a3d;
+  --jv-zone: #e8b478;
+  --jv-rust: #b4552a;
+  --jv-rust-dp: #a04b23;
+  --jv-storm: #8f3a1d;
+  --jv-divider: rgba(240, 231, 220, 0.14);
+  --jv-border: rgba(240, 231, 220, 0.2);
+  --jv-ink-hover: rgba(240, 231, 220, 0.07);
+  --jv-ink-press: rgba(240, 231, 220, 0.14);
+  --jv-hover: rgba(217, 138, 61, 0.12);
+  --jv-press: rgba(217, 138, 61, 0.22);
+  --jv-accent-dim: rgba(217, 138, 61, 0.6);
+  --jv-rust-dim: rgba(180, 85, 42, 0.6);
+
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --jv-bg: #eae4d8;
+  --jv-surface: #f4efe4;
+  --jv-ink: #2b2723;
+  --jv-accent: #a9663c;
+  --jv-zone: #e0c9a8;
+  --jv-rust: #7e4426;
+  --jv-rust-dp: #6b3a20;
+  --jv-storm: #5e2a15;
+  --jv-divider: rgba(43, 39, 35, 0.16);
+  --jv-border: rgba(43, 39, 35, 0.22);
+  --jv-ink-hover: rgba(43, 39, 35, 0.06);
+  --jv-ink-press: rgba(43, 39, 35, 0.12);
+  --jv-hover: rgba(169, 102, 60, 0.12);
+  --jv-press: rgba(169, 102, 60, 0.22);
+  --jv-accent-dim: rgba(169, 102, 60, 0.6);
+  --jv-rust-dim: rgba(126, 68, 38, 0.6);
+
+  color-scheme: light;
+}

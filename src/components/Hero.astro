@@ -1,0 +1,129 @@
+---
+import JupiterPlanet from './JupiterPlanet.astro';
+---
+
+<section class="hero">
+  <div class="planet"><JupiterPlanet size={760} /></div>
+
+  <div class="copy">
+    <p class="eyebrow kicker">
+      <span class="eyebrow-rule" aria-hidden="true"></span>Offensive security &amp; security engineering
+    </p>
+
+    <h1>Attack surface, mapped the way an adversary would map it.</h1>
+
+    <p class="lede">
+      Penetration testing and the detection engineering that makes the next test harder. Senior
+      operators only, nothing subcontracted, findings written for the engineer who has to fix them.
+    </p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="#contact">Request a scope call</a>
+      <a class="btn btn-secondary" href="#research">Read a sample report</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 104px var(--gutter) 86px;
+    overflow: hidden;
+  }
+
+  .planet {
+    position: absolute;
+    right: -150px;
+    top: -140px;
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .copy {
+    position: relative;
+    max-width: 640px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .eyebrow-rule {
+    width: 26px;
+    height: 1px;
+    background: var(--jv-accent);
+  }
+
+  h1 {
+    font-size: 62px;
+    line-height: 1.03;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    font-size: 17px;
+    line-height: 1.6;
+    opacity: 0.7;
+    max-width: 500px;
+    margin: 0 0 36px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .actions .btn {
+    font-size: 14px;
+    padding: 11px 19px;
+  }
+
+  /* Un-designed fallback — see global.css. */
+  @media (max-width: 1279px) {
+    .hero {
+      padding-top: 76px;
+      padding-bottom: 64px;
+    }
+
+    .copy {
+      max-width: 640px;
+    }
+
+    h1 {
+      font-size: 48px;
+    }
+
+    /* Scaled back and dimmed so the copy stays legible over it. */
+    .planet {
+      right: -220px;
+      top: -100px;
+      opacity: 0.4;
+      transform: scale(0.75);
+      transform-origin: top right;
+    }
+  }
+
+  @media (max-width: 639px) {
+    h1 {
+      font-size: 34px;
+    }
+
+    .lede {
+      font-size: 16px;
+    }
+
+    .planet {
+      opacity: 0.28;
+      transform: scale(0.55);
+    }
+
+    .actions {
+      flex-wrap: wrap;
+    }
+  }
+</style>
