@@ -52,8 +52,8 @@ export const serviceLines: ServiceLine[] = [
   {
     moon: 'Callisto',
     dot: 'rust-dim',
-    short: 'Embedded and tactical edge security engineering',
-    title: 'Embedded & tactical edge security engineering',
+    short: 'Embedded and AI security engineering',
+    title: 'Embedded & AI security engineering',
     description:
       'Firmware, board-level and radio work on deployed edge hardware, including tactical kit that has to hold up off-network and under contest.',
     duration: 'Scoped',
