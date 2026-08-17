@@ -21,7 +21,7 @@ npm run check    # Astro + TypeScript diagnostics
 src/
   data/site.ts          all homepage copy and the service-line / advisory / stat data
   layouts/Layout.astro  document shell, meta, and the pre-paint theme boot script
-  pages/index.astro     the 1280px page shell; composes the sections in order
+  pages/index.astro     the full-width page shell; composes the sections in order
   components/
     SiteNav ThemeToggle Hero ServiceStrip ServiceLines
     Method StatBand Research Credentials ClosingCta SiteFooter
@@ -29,13 +29,37 @@ src/
     JupiterPlanet.astro 760x760 hero planet
     OrbitGlyph.astro    reduced planet bled behind the closing CTA
   styles/
-    tokens.css          type/space/radius from Nocturne + the Jupiter-bands palette
+    tokens.css          type/space/radius from Nocturne, the fluid scale, and the
+                        Jupiter-bands palette
     components.css      shared .btn / .kicker layer
     global.css          reset, heading base, theme cross-fade, SVG paint classes
 ```
 
 Copy lives in `src/data/site.ts`, not in the components — the handoff treats it as
 final, so edit it in one place.
+
+## Scaling
+
+The page fills the viewport instead of sitting in a fixed, centred 1280px column.
+The handoff's 1280px canvas is now the **anchor** of a fluid scale rather than a
+frame: gutters, section padding, the type scale, the column splits, the form field
+and both SVG graphics are `clamp()`ed so that
+
+- **at a 1280px viewport every one of them resolves to the specced value exactly**
+  — the mock still renders as drawn, verified property by property;
+- above 1280px they grow with the viewport and top out between roughly 2200px and
+  2560px, so an ultra-wide display gets a bigger page, not a stretched one;
+- `--page-max` (2560px) is the only place the layout re-centres, past the point
+  where everything has already stopped growing.
+
+Each clamp is commented with the value it hits at 1280 (`/* 56px @ 1280 */`), which
+is the number to check an edit against. The display sizes climb faster than the
+body sizes, so the hierarchy widens rather than scaling uniformly. The two graphics
+are sized in CSS off a local `--planet-size` / `--glyph-size`, with their bleed
+offsets expressed as fractions of that size so the composition holds at any width.
+
+There are no breakpoints in the desktop range — the only `@media` blocks left are
+the tablet/phone fallback below.
 
 ## Theming
 
@@ -82,13 +106,17 @@ logs a warning to the console instead. Wire the endpoint before launch.
 
 ## Open items
 
-- **Responsive behaviour is not designed.** The mock is a fixed 1280px canvas and
-  that rendering is exact. Below 1280px the site falls back to the moves the handoff
-  suggested (4-up grids to 2-up then 1-up at 1023px/639px, the fixed column splits
-  stacked, the hero planet scaled back and dimmed, the nav wrapping to a second row
-  instead of a mobile menu, which was never specced). Every one of those rules is in
-  a `@media (max-width: …)` block marked "un-designed fallback" and needs the
-  designer's sign-off.
+- **Responsive behaviour is not designed.** The mock is a single 1280px canvas, and
+  that rendering is still exact (see [Scaling](#scaling)). Everything either side of
+  it needs the designer's sign-off:
+  - **above 1280px**, the fluid scale — how fast the display type climbs relative to
+    the body copy, how large the hero planet is allowed to get, and where the maxima
+    should sit — is an engineering read of the design's proportions, not a spec;
+  - **below 1024px**, the fallback reflows the handoff suggested (4-up grids to 2-up
+    then 1-up at 1023px/639px, the fixed column splits stacked, the hero planet
+    pinned back and dimmed, the nav wrapping to a second row instead of a mobile
+    menu, which was never specced). Those rules are in the `@media (max-width: …)`
+    blocks marked "un-designed fallback".
 - Footer links (`Disclosure policy`, `PGP key`, `security.txt`) and
   "Browse the advisories" are `#` placeholders — the handoff doesn't specify targets.
 - Advisories are hard-coded in `site.ts`. The shape (`id`, `title`, `severity` or

@@ -26,28 +26,39 @@ import JupiterPlanet from './JupiterPlanet.astro';
 <style>
   .hero {
     position: relative;
-    padding: 104px var(--gutter) 86px;
+    /* 104px / 86px @ 1280 */
+    padding: clamp(76px, 8.125vw, 156px) var(--gutter) clamp(64px, 6.71875vw, 128px);
     overflow: hidden;
   }
 
+  /* The planet is sized in CSS rather than by the component's width/height
+     attributes so it can ride the viewport, and both offsets are expressed as
+     fractions of the disc — the bleed off the top-right corner stays the same
+     composition at every width instead of drifting as the graphic grows. */
   .planet {
     position: absolute;
-    right: -150px;
-    top: -140px;
+    --planet-size: clamp(560px, 59.375vw, 1180px); /* 760px @ 1280 */
+    right: calc(var(--planet-size) * -0.197);
+    top: calc(var(--planet-size) * -0.184);
     line-height: 0;
     pointer-events: none;
   }
 
+  .planet :global(svg) {
+    width: var(--planet-size);
+    height: auto;
+  }
+
   .copy {
     position: relative;
-    max-width: 640px;
+    max-width: clamp(480px, 50vw, 920px); /* 640px @ 1280 */
   }
 
   .eyebrow {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 30px;
+    margin-bottom: clamp(22px, 2.34375vw, 44px); /* 30px @ 1280 */
   }
 
   .eyebrow-rule {
@@ -57,19 +68,19 @@ import JupiterPlanet from './JupiterPlanet.astro';
   }
 
   h1 {
-    font-size: 62px;
+    font-size: var(--fs-display);
     line-height: 1.03;
     letter-spacing: -0.03em;
-    margin: 0 0 24px;
+    margin: 0 0 clamp(18px, 1.875vw, 36px); /* 24px @ 1280 */
     text-wrap: balance;
   }
 
   .lede {
-    font-size: 17px;
+    font-size: var(--fs-2xl);
     line-height: 1.6;
     opacity: 0.7;
-    max-width: 500px;
-    margin: 0 0 36px;
+    max-width: clamp(400px, 39.0625vw, 700px); /* 500px @ 1280 */
+    margin: 0 0 clamp(28px, 2.8125vw, 54px); /* 36px @ 1280 */
   }
 
   .actions {
@@ -78,32 +89,18 @@ import JupiterPlanet from './JupiterPlanet.astro';
   }
 
   .actions .btn {
-    font-size: 14px;
-    padding: 11px 19px;
+    font-size: var(--fs-lg);
+    padding: clamp(11px, 0.859375vw, 15px) clamp(19px, 1.484375vw, 27px);
   }
 
-  /* Un-designed fallback — see global.css. */
-  @media (max-width: 1279px) {
-    .hero {
-      padding-top: 76px;
-      padding-bottom: 64px;
-    }
-
-    .copy {
-      max-width: 640px;
-    }
-
-    h1 {
-      font-size: 48px;
-    }
-
-    /* Scaled back and dimmed so the copy stays legible over it. */
+  /* Un-designed fallback — see global.css. Below the canvas the planet stops
+     scaling with the viewport and is pinned back and dimmed so the copy stays
+     legible over it. */
+  @media (max-width: 1023px) {
     .planet {
-      right: -220px;
-      top: -100px;
+      --planet-size: 620px;
+      right: calc(var(--planet-size) * -0.35);
       opacity: 0.4;
-      transform: scale(0.75);
-      transform-origin: top right;
     }
   }
 
@@ -117,8 +114,8 @@ import JupiterPlanet from './JupiterPlanet.astro';
     }
 
     .planet {
+      --planet-size: 440px;
       opacity: 0.28;
-      transform: scale(0.55);
     }
 
     .actions {

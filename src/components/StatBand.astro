@@ -22,7 +22,8 @@ import { stats } from '../data/site';
   }
 
   .cell {
-    padding: 28px 32px 32px;
+    /* 28px / 32px / 32px @ 1280 */
+    padding: clamp(24px, 2.1875vw, 42px) clamp(24px, 2.5vw, 48px) clamp(26px, 2.5vw, 48px);
     border-right: 1px solid var(--jv-divider);
   }
 
@@ -37,12 +38,12 @@ import { stats } from '../data/site';
   .value {
     font-family: var(--font-heading);
     font-weight: var(--font-heading-weight);
-    font-size: 30px;
+    font-size: var(--fs-stat);
     letter-spacing: -0.02em;
   }
 
   .label {
-    font-size: 12px;
+    font-size: var(--fs-sm);
     opacity: 0.55;
     margin-top: 4px;
   }

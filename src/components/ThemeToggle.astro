@@ -54,8 +54,10 @@
     transform: translateX(20px);
   }
 
+  /* The switch geometry stays fixed — it's a control, not layout — but the
+     label rides the small-type scale so it doesn't shrink against the nav. */
   .label {
-    font-size: 12px;
+    font-size: var(--fs-sm);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     opacity: 0.5;

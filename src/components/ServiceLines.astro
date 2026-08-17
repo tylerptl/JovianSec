@@ -7,8 +7,8 @@ import { serviceLines } from '../data/site';
     <div class="intro">
       <h2>The four service lines</h2>
       <p>
-        Each line is staffed by the operators who do that work all year. Scoped by system, priced by
-        the week.
+        Each line is staffed by dedicated operators. Scoped by system, priced by
+        outcome.
       </p>
     </div>
 
@@ -34,34 +34,39 @@ import { serviceLines } from '../data/site';
 
 <style>
   .lines {
-    padding: 88px var(--gutter) 76px;
+    /* 88px / 76px @ 1280 */
+    padding: clamp(64px, 6.875vw, 132px) var(--gutter) clamp(56px, 5.9375vw, 116px);
     border-top: 1px solid var(--jv-divider);
   }
 
+  /* The intro column and the row's name/duration columns were fixed px on the
+     canvas; as fluid tracks they hold the same proportion of the page, so the
+     row's three columns stay in the ratio the design draws them in. */
   .layout {
     display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 56px;
+    grid-template-columns: clamp(240px, 23.4375vw, 440px) 1fr; /* 300px @ 1280 */
+    gap: clamp(40px, 4.375vw, 88px); /* 56px @ 1280 */
     align-items: start;
   }
 
   h2 {
-    font-size: 32px;
+    font-size: var(--fs-h2);
     letter-spacing: -0.02em;
     margin: 0 0 12px;
   }
 
   .intro p {
-    font-size: 14px;
+    font-size: var(--fs-lg);
     opacity: 0.62;
   }
 
   .row {
     display: grid;
-    grid-template-columns: 170px 1fr 120px;
-    gap: 24px;
+    /* 170px / 120px @ 1280 */
+    grid-template-columns: clamp(150px, 13.28125vw, 250px) 1fr clamp(110px, 9.375vw, 176px);
+    gap: clamp(20px, 1.875vw, 36px); /* 24px @ 1280 */
     align-items: baseline;
-    padding: 22px 0;
+    padding: clamp(18px, 1.71875vw, 34px) 0; /* 22px @ 1280 */
     border-top: 1px solid var(--jv-divider);
   }
 
@@ -79,7 +84,7 @@ import { serviceLines } from '../data/site';
   /* Set flush with the body leading — the moon name sits on a row baseline,
      not in a heading block. */
   .moon h3 {
-    font-size: 19px;
+    font-size: var(--fs-3xl);
     line-height: 1.55;
     letter-spacing: normal;
   }
@@ -103,17 +108,17 @@ import { serviceLines } from '../data/site';
   }
 
   .title {
-    font-size: 15px;
+    font-size: var(--fs-xl);
     margin-bottom: 5px;
   }
 
   .desc {
-    font-size: 13px;
+    font-size: var(--fs-md);
     opacity: 0.6;
   }
 
   .duration {
-    font-size: 12px;
+    font-size: var(--fs-sm);
     opacity: 0.5;
     text-align: right;
   }

@@ -52,10 +52,10 @@ export const serviceLines: ServiceLine[] = [
   {
     moon: 'Callisto',
     dot: 'rust-dim',
-    short: 'Embedded and AI security engineering',
-    title: 'Embedded & AI security engineering',
+    short: 'Embedded systems & AI security engineering',
+    title: 'Embedded systems & AI security engineering',
     description:
-      'Firmware, board-level and radio work on deployed edge hardware, including tactical kit that has to hold up off-network and under contest.',
+      'Security engineering contextualized with the operational reality of your systems — the hardware they run on, the constraints they carry, the requirements they must meet.',
     duration: 'Scoped',
   },
   {
@@ -64,7 +64,7 @@ export const serviceLines: ServiceLine[] = [
     short: 'AI & LLM system development & integration',
     title: 'AI & LLM system development & integration',
     description:
-      'Building and integrating model-backed systems with the evaluation harnesses, tool-permission boundaries and guardrails the deployment actually needs.',
+      'Building and integrating model-backed systems that stay affordable to run and reusable across deployments. Security and privacy are baked into the requirements, not retrofitted after launch.',
     duration: 'Retained',
   },
 ];
@@ -73,12 +73,12 @@ export const methodSteps = [
   {
     step: '01',
     title: 'Scope',
-    body: 'A 30-minute call with the operator who will run the test. Written scope, fixed price, named dates.',
+    body: 'A 30-minute call with the operator who will run the test. Written scope, named dates, and next steps.',
   },
   {
     step: '02',
     title: 'Operate',
-    body: 'Daily notes in your channel. Critical findings are reported the hour they are confirmed, not at the end.',
+    body: 'Daily comms in your channel. Relevant assessment updates are reported the hour they are confirmed, not at the end.',
   },
   {
     step: '03',
@@ -88,16 +88,69 @@ export const methodSteps = [
   {
     step: '04',
     title: 'Retest',
-    body: 'Every finding retested once your fixes land, included in the original price. Letter reissued on close.',
+    body: 'Every finding retested once your fixes land, included in the original price. Vulnerability report reissued on close.',
   },
 ] as const;
 
-export const stats = [
-  { value: '240+', label: 'Engagements delivered' },
-  { value: '31', label: 'CVEs credited to the team' },
-  { value: '11 yrs', label: 'Median operator experience' },
-  { value: '0', label: 'Tests subcontracted out' },
-] as const;
+/**
+ * The "How the lines connect" band, from the handoff in `design/flow-1a.html`.
+ *
+ * `sequence` is the lit arc, in hand-off order — Europa → Io → Callisto. It is
+ * exactly three entries long and the order is load-bearing: ServiceFlow.astro
+ * pins each one to a fixed position in the diagram's coordinate space, so
+ * adding or reordering entries needs the geometry redrawn, not just this list.
+ * Ganymede sits off the arc, on its own.
+ *
+ * `stackLabel` is the same line written out for the stacked narrow-viewport
+ * list, which is also the diagram's accessible copy; `desc` is shared by both.
+ */
+export const serviceFlow = {
+  kicker: 'How the lines connect',
+  intro:
+    'Each line feeds the next, so findings carry forward without a re-scope — and any line can be engaged on its own.',
+  /** Sits between each pair of moons, on the arc. */
+  feeds: 'feeds',
+  /** Heads the dashed stubs dropping into each moon. */
+  entry: 'Enter at any line',
+  sequence: [
+    {
+      key: 'europa',
+      moon: 'Europa',
+      dot: 'rust',
+      line: 'Red teaming & adversary simulation',
+      stackLabel: 'Europa — red teaming & adversary simulation',
+      desc: 'Objective-based operations surface the paths that matter and the systems they run through.',
+    },
+    {
+      key: 'io',
+      moon: 'Io',
+      dot: 'accent',
+      line: 'Penetration testing',
+      stackLabel: 'Io — penetration testing',
+      desc: "Those systems get tested to depth, with the adversary's route already known.",
+    },
+    {
+      key: 'callisto',
+      moon: 'Callisto',
+      dot: 'rust-dim',
+      line: 'Embedded systems & AI security engineering',
+      stackLabel: 'Callisto — embedded systems & AI security engineering',
+      desc: 'Findings become engineering, contextualized with the hardware your systems run on and the constraints they carry.',
+    },
+  ],
+  ganymede: {
+    dot: 'accent-dim',
+    /** Under the short dashed arc, below the sequence. */
+    title: 'Ganymede — its own orbit',
+    desc: 'AI & LLM system development & integration. Engaged on its own terms, with adversary simulation, testing and security engineering baked into the requirements.',
+    stackLabel: 'Ganymede — AI & LLM system development & integration',
+    /** The stack carries the title's second sentence only — the first is the label. */
+    stackDesc:
+      'Engaged on its own terms, with adversary simulation, testing and security engineering baked into the requirements.',
+  },
+  /** Closes the stacked list. */
+  summary: 'Each line feeds the next; any line can be engaged on its own.',
+} as const;
 
 /**
  * Advisory list. Shaped so it can be swapped for a CMS fetch without touching

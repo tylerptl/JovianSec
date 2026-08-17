@@ -16,7 +16,7 @@ body {
   background: var(--jv-bg);
   color: var(--jv-ink);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--fs-xl);
   line-height: 1.55;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
@@ -90,11 +90,23 @@ p {
 .f-rust {
   fill: var(--jv-rust);
 }
+.f-rust-dim {
+  fill: var(--jv-rust-dim);
+}
+.f-accent-dim {
+  fill: var(--jv-accent-dim);
+}
 .s-ink {
   stroke: var(--jv-ink);
 }
 .s-accent {
   stroke: var(--jv-accent);
+}
+.s-accent-dim {
+  stroke: var(--jv-accent-dim);
+}
+.s-divider {
+  stroke: var(--jv-divider);
 }
 .s-rust {
   stroke: var(--jv-rust);
@@ -129,12 +141,16 @@ p {
 
 /*
  * ── Below the design canvas ──────────────────────────────────────────────
- * Responsive behaviour was NOT designed; the mock is a fixed 1280px canvas.
- * Everything under `max-width: 1279px` here and in the components is a
- * functional fallback along the lines the handoff suggested (4-up grids to
- * 2-up then 1-up, the fixed column splits to stacked, the hero graphic scaled
- * back and dimmed) and still needs the designer's sign-off. Nothing in this
- * block affects the 1280px rendering.
+ * The desktop range (1280px and up) is handled by the fluid clamp() scale in
+ * tokens.css and the components — no breakpoints involved, and 1280px itself
+ * still resolves to the specced values exactly.
+ *
+ * These two blocks are the tablet/phone fallback. The reflows they trigger
+ * (4-up grids to 2-up then 1-up, the fixed column splits stacked, the hero
+ * graphic pulled back and dimmed, the nav wrapping to a second row) were NOT
+ * designed and still need the designer's sign-off; they only pin the gutter
+ * tighter than the fluid formula would, since the formula is tuned for the
+ * desktop range it anchors.
  */
 @media (max-width: 1023px) {
   :root {

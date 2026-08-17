@@ -24,7 +24,8 @@ import { serviceLines } from '../data/site';
   }
 
   .cell {
-    padding: 24px 32px 28px;
+    /* 24px / 32px / 28px @ 1280 */
+    padding: clamp(20px, 1.875vw, 36px) clamp(24px, 2.5vw, 48px) clamp(24px, 2.1875vw, 42px);
     border-right: 1px solid var(--jv-divider);
   }
 
@@ -65,11 +66,11 @@ import { serviceLines } from '../data/site';
 
   .moon {
     font-family: var(--font-heading);
-    font-size: 17px;
+    font-size: var(--fs-2xl);
   }
 
   .desc {
-    font-size: 13px;
+    font-size: var(--fs-md);
     opacity: 0.65;
     line-height: 1.45;
   }
