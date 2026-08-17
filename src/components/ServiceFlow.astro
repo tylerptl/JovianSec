@@ -1,0 +1,341 @@
+---
+import { serviceFlow } from '../data/site';
+
+const { kicker, intro, feeds, entry, sequence, ganymede, summary } = serviceFlow;
+---
+
+<section class="flow" aria-labelledby="flow-title">
+  <div class="head">
+    <h2 class="kicker" id="flow-title">{kicker}</h2>
+    <p class="intro">{intro}</p>
+  </div>
+
+  {/*
+    The diagram is decorative — the stacked list below carries the same content
+    for assistive tech and for anything narrower than the design width.
+  */}
+  <div class="diagram" aria-hidden="true">
+    {/*
+      Geometry is the handoff's, unchanged: the moons sit on the Bézier at
+      t = 0.2 / 0.5 / 0.8, at radii 9 / 13 / 11 (real-world moon proportions).
+      Colour is the one thing that moved — SVG presentation attributes can't
+      resolve var(), so every fill and stroke paints through the .f-* / .s-*
+      classes in global.css and themes with the rest of the page.
+    */}
+    <svg class="arc" viewBox="0 0 1168 200" fill="none" focusable="false">
+      {/* full orbit, faint */}
+      <path class="s-divider" d="M 10 170 C 250 40, 900 40, 1158 170" stroke-width="1"></path>
+      {/* lit segment spanning Europa → Callisto */}
+      <path
+        class="s-accent"
+        d="M 10 170 C 250 40, 900 40, 1158 170"
+        stroke-width="1"
+        stroke-dasharray="770 600"
+        stroke-dashoffset="-120"
+        opacity=".85"></path>
+      {/* direction of hand-off */}
+      <g class="s-accent" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M -6 -5 L 0 0 L -6 5" transform="translate(378.3,81.3) rotate(-4.3)"></path>
+        <path d="M -6 -5 L 0 0 L -6 5" transform="translate(789,81.3) rotate(4.3)"></path>
+      </g>
+      {/* independent entry stubs above each moon */}
+      <g class="s-accent-dim" stroke-width="1" stroke-dasharray="2 4">
+        <path d="M 196.8 62 L 196.8 88"></path>
+        <path d="M 577.25 27 L 577.25 51"></path>
+        <path d="M 962.6 62 L 962.6 88"></path>
+      </g>
+      <g class="s-accent-dim" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 192.8 84 L 196.8 88 L 200.8 84"></path>
+        <path d="M 573.25 47 L 577.25 51 L 581.25 47"></path>
+        <path d="M 958.6 84 L 962.6 88 L 966.6 84"></path>
+      </g>
+      {/* moons, sized in real-world proportion: Europa < Callisto < Ganymede, Io mid */}
+      <circle class="f-rust" cx="196.8" cy="107.6" r="9"></circle>
+      <circle class="f-accent" cx="577.25" cy="72.5" r="13"></circle>
+      <circle class="f-rust-dim" cx="962.6" cy="107.6" r="11"></circle>
+    </svg>
+
+    <div class="feeds feeds--1">{feeds}</div>
+    <div class="feeds feeds--2">{feeds}</div>
+    <div class="entry"><span>{entry}</span><span class="entry-rule"></span></div>
+
+    {
+      sequence.map((item) => (
+        <div class={`node node--${item.key}`}>
+          <div class="moon">{item.moon}</div>
+          <div class="line">{item.line}</div>
+          <p class="desc">{item.desc}</p>
+        </div>
+      ))
+    }
+
+    <div class="standalone">
+      <div class="standalone-inner">
+        <svg viewBox="0 0 120 40" fill="none" focusable="false">
+          <path
+            class="s-divider"
+            d="M 4 30 C 34 6, 86 6, 116 30"
+            stroke-width="1"
+            stroke-dasharray="3 4"></path>
+          <circle class="f-accent-dim" cx="60" cy="13" r="10"></circle>
+        </svg>
+        <div>
+          <div class="moon">{ganymede.title}</div>
+          <p class="desc">{ganymede.desc}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Narrow-viewport equivalent, and the accessible copy of the diagram. */}
+  <ol class="stack">
+    {
+      [...sequence, ganymede].map((item) => (
+        <li class="step">
+          <span class={`dot dot-${item.dot}`} aria-hidden="true" />
+          <div>
+            <div class="moon">{item.stackLabel}</div>
+            <p class="desc">{'stackDesc' in item ? item.stackDesc : item.desc}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="summary">{summary}</p>
+</section>
+
+<style>
+  .flow {
+    /* 52px / 56px @ 1280 */
+    padding: clamp(40px, 4.0625vw, 78px) var(--gutter) clamp(44px, 4.375vw, 84px);
+    border-top: 1px solid var(--jv-divider);
+    border-bottom: 1px solid var(--jv-divider);
+  }
+
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    /* 32px / 16px @ 1280 */
+    gap: clamp(24px, 2.5vw, 48px);
+    margin-bottom: clamp(12px, 1.25vw, 24px);
+  }
+
+  .intro {
+    font-size: var(--fs-md);
+    opacity: 0.6;
+    max-width: clamp(360px, 36.71875vw, 640px); /* 470px @ 1280 */
+    text-align: right;
+  }
+
+  /*
+   * ── The diagram ──────────────────────────────────────────────────────────
+   * The SVG's viewBox (1168 x 200) and the HTML label offsets share one
+   * coordinate space, so they stay registered only if they scale together.
+   * This box IS that space — 1168 x 366, held by aspect-ratio — and every
+   * offset below is written as its percentage of it, with the handoff's pixel
+   * in the comment (Io's 434px / 1168 = 37.1575%).
+   *
+   * At a 1280px viewport the container is exactly 1168px wide and every value
+   * resolves to the handoff's pixel. Above it the page is fluid, so the whole
+   * diagram scales as one piece rather than sitting in a 1168px island with
+   * the section's rules running past it. Below 1280px it can't hold its
+   * composition at all and the stacked list takes over.
+   */
+  .diagram {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1168 / 366;
+    /* cqw below = the same fraction-of-the-diagram trick for nested elements,
+       which percentages can't express once they're inside a flex item. */
+    container-type: inline-size;
+  }
+
+  .arc {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  .node {
+    position: absolute;
+    width: 25.6849%; /* 300px */
+  }
+
+  .node--europa {
+    left: 0;
+    top: 36.0656%; /* 132px */
+  }
+
+  .node--io {
+    left: 37.1575%; /* 434px */
+    top: 28.4153%; /* 104px */
+  }
+
+  .node--callisto {
+    left: 74.3151%; /* 868px */
+    top: 36.0656%; /* 132px */
+  }
+
+  .moon {
+    font-family: var(--font-heading);
+    font-weight: var(--font-heading-weight);
+    font-size: var(--fs-xl);
+    margin-bottom: 6px;
+  }
+
+  .line {
+    font-size: var(--fs-lg);
+    margin-bottom: 6px;
+  }
+
+  .desc {
+    font-size: clamp(12px, 0.9765625vw, 15px); /* 12.5px @ 1280 */
+    opacity: 0.55;
+    line-height: 1.5;
+  }
+
+  .feeds {
+    position: absolute;
+    top: 24.0437%; /* 88px */
+    font-size: clamp(10px, 0.78125vw, 13px); /* 10px @ 1280 */
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+
+  .feeds--1 {
+    left: 30.137%; /* 352px */
+  }
+
+  .feeds--2 {
+    left: 65.3253%; /* 763px */
+  }
+
+  .entry {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: clamp(10px, 0.78125vw, 13px); /* 10px @ 1280 */
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.45;
+  }
+
+  .entry-rule {
+    width: 5.4795cqw; /* 64px */
+    height: 1px;
+    background: var(--jv-divider);
+  }
+
+  .standalone {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .standalone-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.1986cqw; /* 14px */
+    max-width: 61.6438%; /* 720px */
+  }
+
+  .standalone svg {
+    display: block;
+    flex: none;
+    width: 10.274cqw; /* 120px */
+    height: auto;
+  }
+
+  /* Both the stacked list and its closing line belong to the narrow fallback. */
+  .stack {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .summary {
+    display: none;
+  }
+
+  /*
+   * ── Below the design width ───────────────────────────────────────────────
+   * The diagram is a fixed composition and can't reflow, so under 1280px it is
+   * replaced wholesale by the stacked list — same four lines, same copy, each
+   * with its dot. Un-designed fallback, as elsewhere: see global.css.
+   */
+  @media (max-width: 1279px) {
+    .head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .intro {
+      max-width: none;
+      text-align: left;
+    }
+
+    .diagram {
+      display: none;
+    }
+
+    .stack {
+      display: block;
+      margin-top: 24px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 14px;
+      padding: 16px 0;
+      border-top: 1px solid var(--jv-divider);
+    }
+
+    .step:last-child {
+      border-bottom: 1px solid var(--jv-divider);
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      margin-top: 5px;
+    }
+    .dot-accent {
+      background: var(--jv-accent);
+    }
+    .dot-rust {
+      background: var(--jv-rust);
+    }
+    .dot-rust-dim {
+      background: var(--jv-rust-dim);
+    }
+    .dot-accent-dim {
+      background: var(--jv-accent-dim);
+    }
+
+    /* Aligns with the stack's text column: 22px dot track + 14px gap. */
+    .summary {
+      display: block;
+      padding: 10px 0 0 36px;
+      font-size: clamp(10px, 0.78125vw, 13px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.45;
+    }
+  }
+</style>

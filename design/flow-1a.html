@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jovian — service flow section (option 1a) reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Tokens — these mirror the site's existing dark/light theme vars.
+   In production DELETE this block and use the site's own custom properties. */
+:root{
+  --jv-bg:#0f0c09; --jv-ink:#f0e7dc; --jv-accent:#d98a3d; --jv-rust:#b4552a;
+  --jv-divider:rgba(240,231,220,.14);
+  --jv-accent-dim:rgba(217,138,61,.6); --jv-rust-dim:rgba(180,85,42,.6);
+  --font-heading:'Inter',system-ui,sans-serif; --font-body:'Inter',system-ui,sans-serif;
+}
+[data-theme="light"]{
+  --jv-bg:#eae4d8; --jv-ink:#2b2723; --jv-accent:#a9663c; --jv-rust:#7e4426;
+  --jv-divider:rgba(43,39,35,.16);
+  --jv-accent-dim:rgba(169,102,60,.6); --jv-rust-dim:rgba(126,68,38,.6);
+}
+body{margin:0;background:var(--jv-bg);color:var(--jv-ink);font-family:var(--font-body);font-size:15px;line-height:1.55}
+
+/* ---- section ---- */
+.flow{border-top:1px solid var(--jv-divider);border-bottom:1px solid var(--jv-divider);padding:52px 56px 56px;max-width:1280px;margin:0 auto;box-sizing:border-box}
+.flow__head{display:flex;justify-content:space-between;align-items:baseline;gap:32px;margin-bottom:16px}
+.flow__kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--jv-accent)}
+.flow__intro{font-size:13px;opacity:.6;max-width:470px;text-align:right}
+
+/* ---- diagram (desktop) ----
+   Design width is 1168px = 1280 container − 2×56 padding.
+   The SVG viewBox is 1168×200 and label offsets are in the same coordinate space. */
+.flow__diagram{position:relative;height:366px}
+.flow__arc{display:block;position:absolute;top:0;left:0;width:1168px;height:200px}
+.flow__node{position:absolute;width:300px}
+.flow__node--europa{left:0;top:132px}
+.flow__node--io{left:434px;top:104px}
+.flow__node--callisto{left:868px;top:132px}
+.flow__moon{font-family:var(--font-heading);font-weight:500;font-size:15px;margin-bottom:6px}
+.flow__line{font-size:14px;margin-bottom:6px}
+.flow__desc{font-size:12.5px;opacity:.55;line-height:1.5}
+.flow__feeds{position:absolute;top:88px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.5}
+.flow__feeds--1{left:352px}
+.flow__feeds--2{left:763px}
+.flow__entry{position:absolute;left:0;top:0;display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.45}
+.flow__entry span:last-child{width:64px;height:1px;background:var(--jv-divider)}
+.flow__standalone{position:absolute;left:0;bottom:0;width:100%;display:flex;justify-content:center}
+.flow__standalone-inner{display:flex;align-items:center;gap:14px;max-width:720px}
+.flow__standalone svg{display:block;flex:none}
+
+/* ---- stacked fallback (< 1280px) ---- */
+.flow__stack{display:none}
+@media (max-width:1279px){
+  .flow{padding:40px 24px 44px}
+  .flow__head{flex-direction:column;align-items:flex-start;gap:10px}
+  .flow__intro{text-align:left;max-width:none}
+  .flow__diagram{display:none}
+  .flow__stack{display:block;margin-top:24px}
+  .flow__step{display:grid;grid-template-columns:22px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--jv-divider)}
+  .flow__step:last-child{border-bottom:1px solid var(--jv-divider)}
+  .flow__dot{width:11px;height:11px;border-radius:50%;margin-top:5px}
+  .flow__rail{font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.45;padding:10px 0 0 36px}
+}
+</style>
+</head>
+<body>
+
+<section class="flow" aria-labelledby="flow-title">
+  <div class="flow__head">
+    <h2 class="flow__kicker" id="flow-title">How the lines connect</h2>
+    <p class="flow__intro">Each line feeds the next, so findings carry forward without a re-scope — and any line can be engaged on its own.</p>
+  </div>
+
+  <!-- Desktop diagram. Decorative: the stacked list below carries the same content for AT. -->
+  <div class="flow__diagram" aria-hidden="true">
+    <svg class="flow__arc" viewBox="0 0 1168 200" fill="none" focusable="false">
+      <!-- full orbit, faint -->
+      <path d="M 10 170 C 250 40, 900 40, 1158 170" stroke="var(--jv-divider)" stroke-width="1"></path>
+      <!-- lit segment spanning Europa → Callisto -->
+      <path d="M 10 170 C 250 40, 900 40, 1158 170" stroke="var(--jv-accent)" stroke-width="1" stroke-dasharray="770 600" stroke-dashoffset="-120" opacity=".85"></path>
+      <!-- direction of hand-off -->
+      <g stroke="var(--jv-accent)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M -6 -5 L 0 0 L -6 5" transform="translate(378.3,81.3) rotate(-4.3)"></path>
+        <path d="M -6 -5 L 0 0 L -6 5" transform="translate(789,81.3) rotate(4.3)"></path>
+      </g>
+      <!-- independent entry stubs above each moon -->
+      <g stroke="var(--jv-accent-dim)" stroke-width="1" stroke-dasharray="2 4">
+        <path d="M 196.8 62 L 196.8 88"></path>
+        <path d="M 577.25 27 L 577.25 51"></path>
+        <path d="M 962.6 62 L 962.6 88"></path>
+      </g>
+      <g stroke="var(--jv-accent-dim)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M 192.8 84 L 196.8 88 L 200.8 84"></path>
+        <path d="M 573.25 47 L 577.25 51 L 581.25 47"></path>
+        <path d="M 958.6 84 L 962.6 88 L 966.6 84"></path>
+      </g>
+      <!-- moons, sized in real-world proportion: Europa < Callisto < Ganymede, Io mid -->
+      <circle cx="196.8" cy="107.6" r="9" fill="var(--jv-rust)"></circle>
+      <circle cx="577.25" cy="72.5" r="13" fill="var(--jv-accent)"></circle>
+      <circle cx="962.6" cy="107.6" r="11" fill="var(--jv-rust-dim)"></circle>
+    </svg>
+
+    <div class="flow__feeds flow__feeds--1">feeds</div>
+    <div class="flow__feeds flow__feeds--2">feeds</div>
+    <div class="flow__entry"><span>Enter at any line</span><span></span></div>
+
+    <div class="flow__node flow__node--europa">
+      <div class="flow__moon">Europa</div>
+      <div class="flow__line">Red teaming &amp; adversary simulation</div>
+      <div class="flow__desc">Objective-based operations surface the paths that matter and the systems they run through.</div>
+    </div>
+    <div class="flow__node flow__node--io">
+      <div class="flow__moon">Io</div>
+      <div class="flow__line">Penetration testing</div>
+      <div class="flow__desc">Those systems get tested to depth, with the adversary's route already known.</div>
+    </div>
+    <div class="flow__node flow__node--callisto">
+      <div class="flow__moon">Callisto</div>
+      <div class="flow__line">Embedded systems &amp; AI security engineering</div>
+      <div class="flow__desc">Findings become engineering, contextualized with the hardware your systems run on and the constraints they carry.</div>
+    </div>
+
+    <div class="flow__standalone">
+      <div class="flow__standalone-inner">
+        <svg viewBox="0 0 120 40" width="120" height="40" fill="none" focusable="false">
+          <path d="M 4 30 C 34 6, 86 6, 116 30" stroke="var(--jv-divider)" stroke-width="1" stroke-dasharray="3 4"></path>
+          <circle cx="60" cy="13" r="10" fill="var(--jv-accent-dim)"></circle>
+        </svg>
+        <div>
+          <div class="flow__moon">Ganymede — its own orbit</div>
+          <div class="flow__desc">AI &amp; LLM system development &amp; integration. Engaged on its own terms, with adversary simulation, testing and security engineering baked into the requirements.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Narrow-viewport equivalent, and the accessible copy of the diagram -->
+  <ol class="flow__stack">
+    <li class="flow__step">
+      <span class="flow__dot" style="background:var(--jv-rust)"></span>
+      <div>
+        <div class="flow__moon">Europa — red teaming &amp; adversary simulation</div>
+        <div class="flow__desc">Objective-based operations surface the paths that matter and the systems they run through.</div>
+      </div>
+    </li>
+    <li class="flow__step">
+      <span class="flow__dot" style="background:var(--jv-accent)"></span>
+      <div>
+        <div class="flow__moon">Io — penetration testing</div>
+        <div class="flow__desc">Those systems get tested to depth, with the adversary's route already known.</div>
+      </div>
+    </li>
+    <li class="flow__step">
+      <span class="flow__dot" style="background:var(--jv-rust-dim)"></span>
+      <div>
+        <div class="flow__moon">Callisto — embedded systems &amp; AI security engineering</div>
+        <div class="flow__desc">Findings become engineering, contextualized with the hardware your systems run on and the constraints they carry.</div>
+      </div>
+    </li>
+    <li class="flow__step">
+      <span class="flow__dot" style="background:var(--jv-accent-dim)"></span>
+      <div>
+        <div class="flow__moon">Ganymede — AI &amp; LLM system development &amp; integration</div>
+        <div class="flow__desc">Engaged on its own terms, with adversary simulation, testing and security engineering baked into the requirements.</div>
+      </div>
+    </li>
+  </ol>
+  <p class="flow__rail">Each line feeds the next; any line can be engaged on its own.</p>
+</section>
+
+</body>
+</html>
