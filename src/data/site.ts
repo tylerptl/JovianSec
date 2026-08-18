@@ -8,14 +8,15 @@ export const site = {
   domain: 'joviansec.com',
   tagline: 'Offensive security & security engineering',
   description:
-    'Penetration testing, red teaming, embedded security engineering and AI system work, run by senior operators. Nothing subcontracted.',
+    'Penetration testing, red teaming, system security engineering for embedded and AI systems, and AI/LLM development, run by senior operators. Nothing subcontracted.',
 } as const;
 
+/* Root-relative so the bar works from the service pages, not just the homepage. */
 export const navLinks = [
-  { label: 'Services', href: '#services' },
-  { label: 'Research', href: '#research' },
-  { label: 'Method', href: '#method' },
-  { label: 'Company', href: '#company' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Research', href: '/#research' },
+  { label: 'Method', href: '/#method' },
+  { label: 'Company', href: '/#company' },
 ] as const;
 
 /** The four Galilean moons, in orbital order — the site's four service lines. */
@@ -28,6 +29,8 @@ export type ServiceLine = {
   title: string;
   description: string;
   duration: string;
+  /** The line's own page, under /services/. Matches `slug` in data/services.ts. */
+  slug: string;
 };
 
 export const serviceLines: ServiceLine[] = [
@@ -39,6 +42,7 @@ export const serviceLines: ServiceLine[] = [
     description:
       'Authenticated multi-role testing of web and API surfaces, internal and external networks, and the hybrid estate between them. Business-logic abuse, not just a scanner pass.',
     duration: '2–3 weeks',
+    slug: 'io',
   },
   {
     moon: 'Europa',
@@ -48,15 +52,17 @@ export const serviceLines: ServiceLine[] = [
     description:
       'Objective-based operations against the live environment, threat-informed and mapped to ATT&CK. Run dark, or in purple mode alongside your defenders.',
     duration: '4–8 weeks',
+    slug: 'europa',
   },
   {
     moon: 'Callisto',
     dot: 'rust-dim',
-    short: 'Embedded systems & AI security engineering',
-    title: 'Embedded systems & AI security engineering',
+    short: 'System security engineering for embedded & AI systems',
+    title: 'System security engineering',
     description:
-      'Security engineering contextualized with the operational reality of your systems — the hardware they run on, the constraints they carry, the requirements they must meet.',
+      'System security engineering for embedded and AI systems, contextualized with the operational reality of your environment — the hardware they run on, the constraints they carry, the requirements they must meet.',
     duration: 'Scoped',
+    slug: 'callisto',
   },
   {
     moon: 'Ganymede',
@@ -66,6 +72,7 @@ export const serviceLines: ServiceLine[] = [
     description:
       'Building and integrating model-backed systems that stay affordable to run and reusable across deployments. Security and privacy are baked into the requirements, not retrofitted after launch.',
     duration: 'Retained',
+    slug: 'ganymede',
   },
 ];
 
@@ -133,9 +140,9 @@ export const serviceFlow = {
       key: 'callisto',
       moon: 'Callisto',
       dot: 'rust-dim',
-      line: 'Embedded systems & AI security engineering',
-      stackLabel: 'Callisto — embedded systems & AI security engineering',
-      desc: 'Findings become engineering, contextualized with the hardware your systems run on and the constraints they carry.',
+      line: 'System security engineering',
+      stackLabel: 'Callisto — system security engineering',
+      desc: 'Findings become engineering for the embedded and AI systems underneath — the hardware they run on, the constraints they carry.',
     },
   ],
   ganymede: {

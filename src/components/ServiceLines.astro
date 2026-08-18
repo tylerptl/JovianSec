@@ -15,7 +15,7 @@ import { serviceLines } from '../data/site';
     <div class="rows">
       {
         serviceLines.map((line) => (
-          <article class="row">
+          <a class="row" href={`/services/${line.slug}`}>
             <div class="moon">
               <span class={`dot dot-${line.dot}`} aria-hidden="true" />
               <h3>{line.moon}</h3>
@@ -25,7 +25,7 @@ import { serviceLines } from '../data/site';
               <p class="desc">{line.description}</p>
             </div>
             <p class="duration">{line.duration}</p>
-          </article>
+          </a>
         ))
       }
     </div>
@@ -73,6 +73,19 @@ import { serviceLines } from '../data/site';
   /* Only the last row closes the stack. */
   .row:last-child {
     border-bottom: 1px solid var(--jv-divider);
+  }
+
+  /* Each row is the link to its line's page. The design is unchanged at rest —
+     the affordance is the hover, so the band still reads as a list, not a
+     stack of buttons. */
+  .row {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .row:hover .title,
+  .row:hover .moon h3 {
+    color: var(--jv-accent);
   }
 
   .moon {

@@ -13,54 +13,16 @@ import SiteFooter from '../components/SiteFooter.astro';
 ---
 
 <Layout>
-  <a class="skip" href="#main">Skip to content</a>
-
-  <div class="page">
-    <SiteNav />
-    <main id="main">
-      <Hero />
-      <ServiceStrip />
-      <ServiceLines />
-      <Method />
-      <ServiceFlow />
-      <Research />
-      <Credentials />
-      <ClosingCta />
-    </main>
-    <SiteFooter />
-  </div>
+  <SiteNav />
+  <main id="main">
+    <Hero />
+    <ServiceStrip />
+    <ServiceLines />
+    <Method />
+    <ServiceFlow />
+    <Research />
+    <Credentials />
+    <ClosingCta />
+  </main>
+  <SiteFooter />
 </Layout>
-
-<style>
-  /* The canvas fills the viewport rather than sitting in a fixed 1280px column:
-     content stays flush-left against the (now fluid) gutter and the whitespace
-     is still carried on the right. --page-max only engages past 2560px, where
-     the fluid scale has already topped out and more width would just stretch
-     the hairline grids. */
-  .page {
-    width: 100%;
-    max-width: var(--page-max);
-    margin: 0 auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-  }
-
-  .skip {
-    position: absolute;
-    left: -9999px;
-    top: 0;
-    z-index: 10;
-    padding: 10px 16px;
-    font-size: var(--fs-lg);
-    color: var(--jv-accent);
-    background: var(--jv-surface);
-    border: 1px solid var(--jv-accent);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-  }
-
-  .skip:focus {
-    left: var(--gutter);
-    top: 12px;
-  }
-</style>

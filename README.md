@@ -19,14 +19,19 @@ npm run check    # Astro + TypeScript diagnostics
 
 ```
 src/
-  data/site.ts          all homepage copy and the service-line / advisory / stat data
-  layouts/Layout.astro  document shell, meta, and the pre-paint theme boot script
-  pages/index.astro     the full-width page shell; composes the sections in order
+  data/
+    site.ts             all homepage copy: service lines, advisories, the flow band
+    services.ts         the four service-line pages
+  layouts/Layout.astro  document shell, meta, the pre-paint theme boot script, and
+                        the shared page shell (skip link + .page canvas)
+  pages/
+    index.astro         the homepage; composes the sections in order
+    services/[moon].astro  one template, four pages, from data/services.ts
   components/
     SiteNav ThemeToggle Hero ServiceStrip ServiceLines
-    Method StatBand Research Credentials ClosingCta SiteFooter
+    Method ServiceFlow Research Credentials ClosingCta SiteFooter
     LogoMark.astro      30x30 banded-disc mark
-    JupiterPlanet.astro 760x760 hero planet
+    JupiterPlanet.astro hero planet
     OrbitGlyph.astro    reduced planet bled behind the closing CTA
   styles/
     tokens.css          type/space/radius from Nocturne, the fluid scale, and the
@@ -35,8 +40,20 @@ src/
     global.css          reset, heading base, theme cross-fade, SVG paint classes
 ```
 
-Copy lives in `src/data/site.ts`, not in the components — the handoff treats it as
-final, so edit it in one place.
+Copy lives in `src/data/`, not in the components — the handoff treats it as final,
+so edit it in one place.
+
+## Pages
+
+`/` plus one page per service line at `/services/{io,europa,callisto,ganymede}`,
+all four rendered by a single dynamic route from `data/services.ts`. Each page runs
+header → phases → detail bands → deliverables → the other three lines → the shared
+closing CTA, so a new line is a data entry, not a new template.
+
+The homepage service-line rows link to them. Each row is the anchor and the design
+is unchanged at rest — the affordance is the hover — so the band still reads as a
+list rather than a stack of buttons. `navLinks` are root-relative (`/#services`) so
+the bar works from a service page.
 
 ## Scaling
 
@@ -78,6 +95,33 @@ SVG presentation attributes can't take `var()`, so the planet and the mark paint
 through the `.f-*` / `.s-*` / `.stop-*` classes in `global.css` rather than
 `fill=""` / `stroke=""`. Keep that pattern or the graphic will stop theming.
 
+## The service-flow band
+
+`ServiceFlow.astro` is the "How the lines connect" band, ported from the handoff in
+`design/flow-1a.html`. It carries two ideas at once: the lit arc runs Europa → Io →
+Callisto to show findings feeding forward, and a dashed stub drops into each moon
+from above to show any line can be bought on its own. Ganymede sits below on its
+own short arc.
+
+The geometry is the handoff's, unchanged — moons on the Bézier at t = 0.2 / 0.5 /
+0.8, radii 9 / 13 / 11, and the lit segment is one stroke with a dasharray that
+fades the arc to a faint full orbit at both ends. Two things to know before editing:
+
+- **The SVG viewBox and the HTML label offsets share one coordinate space** (1168 x
+  366, which is the 1280px canvas minus its gutters). They stay registered only
+  because they scale together: the box holds that ratio with `aspect-ratio` and
+  every label offset is a percentage of it, with the handoff's pixel in the comment.
+  Verified against the reference at a 1280px viewport — every element lands within
+  0.02px and the type sizes resolve to 15 / 14 / 12.5 / 10 exactly.
+- **Below 1280px it cannot hold the composition**, so the `.stack` ordered list
+  replaces it. That list is also the diagram's accessible copy; the diagram is
+  `aria-hidden`.
+
+One deliberate difference from the reference render: the closing summary line is
+hidden above 1280px. In `flow-1a.html` it is styled only inside the narrow
+breakpoint, so at desktop it renders as an unstyled 15px paragraph duplicating the
+intro — the spec assigns it to the stacked fallback, and that is where it lives here.
+
 ## The Jupiter graphic
 
 `JupiterPlanet.astro` is hand-built SVG and is painted strictly back-to-front. Two
@@ -117,6 +161,19 @@ logs a warning to the console instead. Wire the endpoint before launch.
     pinned back and dimmed, the nav wrapping to a second row instead of a mobile
     menu, which was never specced). Those rules are in the `@media (max-width: …)`
     blocks marked "un-designed fallback".
+- **The service-line pages have no design handoff.** The template is assembled from
+  patterns the homepage already establishes — the hairline step grid from the method
+  band, the two-column split from the service lines, the fact row from the
+  credentials band — so it is consistent by construction, but no mock was drawn for
+  it. The copy is drafted from the brief and needs a read-through before launch:
+  claims about MITRE tracking, sector research, MOU/ROE sign-off, authorizing-body
+  artifacts and retained support are all statements about how the team works.
+- **The regulatory claims on the Callisto page need a specialist read.** "The
+  standards you answer to" names PCI-DSS, HIPAA, ISO/SAE 21434, UN R155 and the
+  DO-326A / ED-202A airworthiness security set. The page says these are the regimes
+  such systems answer to, not that the team certifies against them — worth checking
+  the wording says exactly what you can stand behind, and that the drone/air
+  equivalents are the ones your programs actually cite.
 - Footer links (`Disclosure policy`, `PGP key`, `security.txt`) and
   "Browse the advisories" are `#` placeholders — the handoff doesn't specify targets.
 - Advisories are hard-coded in `site.ts`. The shape (`id`, `title`, `severity` or

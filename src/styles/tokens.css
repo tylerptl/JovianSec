@@ -51,6 +51,8 @@
    * viewport rather than scaling uniformly.
    */
   --fs-display: clamp(34px, calc(14px + 3.75vw), 96px); /* 62px @ 1280 */
+  /* Interior pages: a step down from the homepage hero, which owns the display size. */
+  --fs-h1-page: clamp(30px, calc(10px + 2.96875vw), 74px); /* 48px @ 1280 */
   --fs-h2-lg: clamp(26px, calc(12px + 2.1875vw), 64px); /* 40px @ 1280 */
   --fs-h2: clamp(24px, calc(12px + 1.5625vw), 48px); /* 32px @ 1280 */
   --fs-h3: clamp(22px, calc(8px + 1.5625vw), 44px); /* 28px @ 1280 */
